@@ -27,12 +27,12 @@ ui <- fluidPage(
 server <- function(input, output) {
     
     # Sample size based on number of gifts and occasions and value of x
-    size <- reactive({
+    size <- eventReactive(input$calculate, {
         round(input$gifts/input$occasions + sqrt(input$x)*(input$gifts/(input$occasions/(input$occasions-1))), 0)
     })
     
     # Create a dataframe for members with score reflecting their characteristics
-    df <- reactive({
+    df <- eventReactive(input$calculate, {
         data.frame(member = rep(1:input$members, size()),
                    gift = rep(1:size(), each = input$members),
                    score_member = rep(rnorm(input$members), size()),
