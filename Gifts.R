@@ -1,10 +1,10 @@
 library(tidyverse)
 
 # Number of gifts in the gift pool
-gifts <- 1000
+gifts <- 10000
 
 # Expected number of members that are gifting (or trying to gift)
-members <- 1000
+members <- 10000
 
 # Number of occasions to suggest a gift for
 occasions <- 10
