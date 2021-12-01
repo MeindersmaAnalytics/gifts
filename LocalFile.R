@@ -18,7 +18,6 @@ ui <- fluidPage(
       h3("UI Main panel"),
       plotOutput("xxx"),
       textOutput("xxx2")
-
       )
     )
   )
