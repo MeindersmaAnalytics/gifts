@@ -16,6 +16,7 @@ ui <- fluidPage(
     ),
     mainPanel(
       h3("UI Main panel"),
+      #dataTableOutput("tableTest"),
       plotOutput("histPlot"),
       textOutput("xxx2")
       )
@@ -32,20 +33,23 @@ server <- function(input, output) {
     
     # Create a dataframe for members with score reflecting their characteristics
     df <- reactive({
-        data.frame(member = rep(1:input$members, size),
-                   gift = rep(1:size, each = members),
-                   score_member = rep(rnorm(members), size),
-                   score_gift = rep(rnorm(size), members)) %>%
+        data.frame(member = rep(1:input$members, size()),
+                   gift = rep(1:size(), each = input$members),
+                   score_member = rep(rnorm(input$members), size()),
+                   score_gift = rep(rnorm(size()), input$members)) %>%
             mutate(distance = abs(score_member - score_gift),
-                   recommended = (distance < similarity)*1) %>% 
+                   recommended = (distance < input$similarity)*1) %>% 
             group_by(member) %>% 
-            summarize(gifts_rec = min(gift_rec, sum(recommended)))
+            summarize(gifts_rec = sum(recommended))
     })
+    output$tableTest <- renderDataTable({
+      df()
+      })
     
     # Show the histogram in the output
     output$histPlot <- renderPlot({
-        ggplot(df, aes(x=gifts_rec)) +
-            geom_histogram()
+        ggplot(df(), aes(x=gifts_rec)) +
+            geom_bar(position="dodge") + scale_x_discrete(limits = c(0,input$gift_rec))
     })
     
 }
